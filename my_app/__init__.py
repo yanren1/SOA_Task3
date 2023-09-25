@@ -33,4 +33,4 @@ facultyData = {faculty: {'Students': {k: v for k, v in studentData.items() if v[
 
 app = Flask(__name__)
 
-from my_app import error_handler, studentModule, facultyModule
+from my_app import errorHandler, studentModule, facultyModule
