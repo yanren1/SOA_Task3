@@ -23,8 +23,8 @@ def get_students_falculty(student_id):
     if student_id not in studentData:
         abort(404)
 
-    return jsonify({'falculty': studentData[student_id]['Faculty'],
-                    'links': url_for('get_falculty', faculty=faculty, _external=True)})
+    return jsonify({'faculty': studentData[student_id]['Faculty'],
+                    'links': url_for('get_faculty', faculty=faculty, _external=True)})
 
 
 # Get details of a student's registered course
