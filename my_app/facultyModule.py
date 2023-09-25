@@ -29,5 +29,9 @@ def get_faculty_courses(faculty):
 # Get students by faculty
 @app.route('/faculties/<string:faculty>/students', methods=['GET'])
 def get_faculty_students(faculty):
+    for student_id in facultyData[faculty]['Students']:
+        if 'Link' not in facultyData[faculty]['Students'][student_id]:
+            facultyData[faculty]['Students'][student_id]['Link'] = url_for('get_student', student_id=student_id, _external=True)
+
     return jsonify({'Students': facultyData[faculty]['Students'], 'links': url_for('get_faculty_students',
                                                                                    faculty=faculty, _external=True)})

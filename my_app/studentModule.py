@@ -5,6 +5,10 @@ from my_app import app, studentData, coursesData, facultyData
 # Get a list of all students
 @app.route('/students', methods=['GET'])
 def get_students():
+    for student_id in studentData:
+        if 'Link' not in studentData[student_id]:
+            studentData[student_id]['Link'] = url_for('get_student', student_id=student_id, _external=True)
+
     return jsonify({'students': studentData})
 
 
@@ -13,12 +17,15 @@ def get_students():
 def get_student(student_id):
     if student_id not in studentData:
         abort(404)
+    if 'Link' not in studentData[student_id]:
+        studentData[student_id]['Link'] = url_for('get_student', student_id=student_id, _external=True)
+
     return jsonify(
         {'student': studentData[student_id], 'links': url_for('get_student', student_id=student_id, _external=True)})
 
 
 @app.route('/students/<int:student_id>/faculty', methods=['GET'])
-def get_students_falculty(student_id):
+def get_students_faculty(student_id):
     faculty = studentData[student_id]['Faculty']
     if student_id not in studentData:
         abort(404)

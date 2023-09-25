@@ -2,6 +2,8 @@
 from flask import Flask
 import random
 
+app = Flask(__name__)
+
 # sample data
 nameList = ['Alice', 'Bob', 'Eva', 'John', 'Ryan', 'James', 'Robert', 'Michael', 'David', 'William', 'Richard',
             'Joseph']
@@ -31,6 +33,3 @@ facultyData = {faculty: {'Students': {k: v for k, v in studentData.items() if v[
                                      ''.join([char for char in faculty if char.isupper()]) in k}
                          } for faculty in facultyList}
 
-app = Flask(__name__)
-
-from my_app import errorHandler, studentModule, facultyModule
