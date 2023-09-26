@@ -2,14 +2,21 @@ from flask import request, jsonify, abort, url_for
 from my_app import app, studentData, coursesData, facultyData
 
 
-# Get a list of all students
+# Get a list of all students with optional filtering
 @app.route('/students', methods=['GET'])
 def get_students():
-    for student_id in studentData:
-        if 'Link' not in studentData[student_id]:
-            studentData[student_id]['Link'] = url_for('get_student', student_id=student_id, _external=True)
+    filtered_students = {}
+    faculty_filter = request.args.get('faculty')
 
-    return jsonify({'students': studentData})
+    for student_id, student_info in studentData.items():
+        if faculty_filter and student_info['Faculty'] != faculty_filter:
+            continue
+
+        if 'Link' not in student_info:
+            student_info['Link'] = url_for('get_student', student_id=student_id, _external=True)
+
+        filtered_students[student_id] = student_info
+    return jsonify({'students': filtered_students})
 
 
 # Get details of a specific student
