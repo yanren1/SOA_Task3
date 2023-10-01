@@ -1,9 +1,12 @@
 from flask import request, jsonify, abort, url_for
 from my_app import app, studentData, coursesData, facultyData
+from main import auth
 
 
 # Get a list of all students with optional filtering
 @app.route('/students', methods=['GET'])
+#Authentication for student list
+@auth.login_required
 def get_students():
     filtered_students = {}
     faculty_filter = request.args.get('faculty')
@@ -20,7 +23,10 @@ def get_students():
 
 
 # Get details of a specific student
+
 @app.route('/students/<int:student_id>', methods=['GET'])
+#Authentication for student details
+@auth.login_required
 def get_student(student_id):
     if student_id not in studentData:
         abort(404)
@@ -32,6 +38,8 @@ def get_student(student_id):
 
 
 @app.route('/students/<int:student_id>/faculty', methods=['GET'])
+#Authentication for student faculty
+@auth.login_required
 def get_students_faculty(student_id):
     faculty = studentData[student_id]['Faculty']
     if student_id not in studentData:
@@ -43,6 +51,8 @@ def get_students_faculty(student_id):
 
 # Get details of a student's registered course
 @app.route('/students/<int:student_id>/courses', methods=['GET'])
+#Authentication for student course registered
+@auth.login_required
 def get_students_courses(student_id):
     if student_id not in studentData:
         abort(404)
@@ -52,6 +62,8 @@ def get_students_courses(student_id):
 
 # Add a new student
 @app.route('/students', methods=['POST'])
+#Admins can add student
+@auth.login_required(role='admin')
 def add_student():
     checkList0 = ['Name', 'Faculty', ]
     checkList1 = ['Age', 'Country', ]
@@ -74,6 +86,8 @@ def add_student():
 
 # Update a student's information
 @app.route('/students/<int:student_id>', methods=['PUT'])
+#Admins can update a student
+@auth.login_required(role='admin')
 def update_student(student_id):
     if student_id not in studentData:
         abort(404)
@@ -99,6 +113,8 @@ def update_student(student_id):
 
 # Delete a student
 @app.route('/students/<int:student_id>', methods=['DELETE'])
+#Admins can delete student
+@auth.login_required(role='admin')
 def delete_student(student_id):
     if student_id not in studentData:
         abort(404)
